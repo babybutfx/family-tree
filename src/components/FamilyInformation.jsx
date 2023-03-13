@@ -38,9 +38,9 @@ const FamilyInformation = () => {
         </Box>
         <Divider />
         <Stack p={2} spacing={2}>
-          {familyInformation.map((family, index) => (
+          {familyInformation.map((family) => (
             <FamilyFrom
-              key={index}
+              key={family.id}
               onCancel={handleFromCancel}
               isReadOnly
               defaultValue={family}

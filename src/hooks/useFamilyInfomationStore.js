@@ -45,7 +45,44 @@ const useFamilyInformationStore = () => {
     });
   };
 
-  return { addFamilyInformation, familyInformation, fetchFamilyInformation };
+  const updateRelationship = async (form) => {
+    const { id, memberRef, ...params } = form;
+
+    const spouseObj = memberRef.find(
+      (member) => member.relationship === "spouse"
+    );
+
+    const spouse = spouseObj
+      ? doc(firestore, COLLECTION, spouseObj.id)
+      : undefined;
+
+    setDoc(spouse, { hasBeenRef: true }, { merge: true });
+
+    const children = memberRef
+      .filter((member) => member.relationship !== "spouse")
+      .map((member) => {
+        const docRef = doc(firestore, COLLECTION, member.id);
+
+        setDoc(docRef, { hasBeenRef: true }, { merge: true });
+
+        return docRef;
+      });
+
+    await setDoc(doc(firestore, COLLECTION, id), {
+      ...params,
+      memberRef: {
+        ...(spouse && { spouse }),
+        ...(children.length > 0 && { children: [...children] }),
+      },
+    });
+  };
+
+  return {
+    addFamilyInformation,
+    familyInformation,
+    fetchFamilyInformation,
+    updateRelationship,
+  };
 };
 
 export default useFamilyInformationStore;

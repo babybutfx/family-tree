@@ -1,0 +1,7 @@
+svg.tommy .node.male>rect {
+    fill: blue;
+}
+
+svg.tommy .node.female>rect {
+    fill: red;
+}

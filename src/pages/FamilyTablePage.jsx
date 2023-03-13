@@ -6,7 +6,7 @@ import FamilyTable from "../components/FamilyTable";
 const FamilyTablePage = () => {
   return (
     <div>
-      <CustomAppBar title="Type : Table" />
+      <CustomAppBar title="Table Membership" />
       <FamilyTable />
     </div>
   );

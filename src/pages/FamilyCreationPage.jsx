@@ -6,7 +6,7 @@ import FamilyInformation from "../components/FamilyInformation";
 const FamilyCreationPage = () => {
   return (
     <div>
-      <CustomAppBar title="Create :Family Infromation" />
+      <CustomAppBar title="Family Infromation" />
       <FamilyInformation />
     </div>
   );
