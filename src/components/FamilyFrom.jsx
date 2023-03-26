@@ -1,15 +1,23 @@
 import { Button, Grid, Paper, TextField, MenuItem } from "@mui/material";
 import dayjs from "dayjs";
 import { useState } from "react";
-import { Status } from "../constants";
+import { Status, Gender } from "../constants";
 import RelationshipDialog from "./RelationshipDialog";
 
-const FamilyFrom = ({ onCancel, onSubmit, defaultValue, isReadOnly }) => {
+let i = 0;
+const FamilyFrom = ({
+  onCancel,
+  onSubmit,
+  onUpdate,
+  defaultValue,
+  isReadOnly,
+}) => {
   const defaultForm = defaultValue ?? {
     firstname: "",
     lastname: "",
     nickname: "",
     birthday: "",
+    gender: "",
     status: "",
   };
   const [isEditing, setIsEditing] = useState(!isReadOnly);
@@ -50,6 +58,11 @@ const FamilyFrom = ({ onCancel, onSubmit, defaultValue, isReadOnly }) => {
 
   const handleFormmSubmit = () => {
     onSubmit(form);
+  };
+
+  const handleFromUpdate = () => {
+    setIsEditing(false);
+    onUpdate(form);
   };
 
   return (
@@ -119,6 +132,23 @@ const FamilyFrom = ({ onCancel, onSubmit, defaultValue, isReadOnly }) => {
             <TextField
               required
               select
+              label="เพศ"
+              name="gender"
+              InputProps={{
+                readOnly: !isEditing,
+              }}
+              onChange={handleFormChange}
+              value={form.gender}
+              fullWidth
+            >
+              <MenuItem value={Gender.Male}>ชาย</MenuItem>
+              <MenuItem value={Gender.Female}>หญิง</MenuItem>
+            </TextField>
+          </Grid>
+          <Grid item xs={2}>
+            <TextField
+              required
+              select
               label="สถานภาพ"
               name="status"
               InputProps={{
@@ -158,7 +188,7 @@ const FamilyFrom = ({ onCancel, onSubmit, defaultValue, isReadOnly }) => {
                 </Grid>
               ) : (
                 <Grid item xs={2}>
-                  <Button size="large" onClick={handleFormmSubmit} fullWidth>
+                  <Button size="large" onClick={handleFromUpdate} fullWidth>
                     Update
                   </Button>
                 </Grid>
@@ -172,7 +202,12 @@ const FamilyFrom = ({ onCancel, onSubmit, defaultValue, isReadOnly }) => {
                 </Button>
               </Grid>
               <Grid item xs={2}>
-                <Button size="large" onClick={handleRelationshipAdd} fullWidth>
+                <Button
+                  size="large"
+                  onClick={handleRelationshipAdd}
+                  disabled={form.status === Status.Single}
+                  fullWidth
+                >
                   Relationship
                 </Button>
               </Grid>

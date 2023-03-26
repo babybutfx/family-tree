@@ -28,7 +28,7 @@ const FamilyTree = () => {
           born: "10-05-2000",
         },
         { id: 2, pids: [1, 4, 5], name: "Bear Fuffy", gender: "female" },
-        { id: 3, mid: 2, fid: 1, name: "Casper Selest", gender: "male" },
+        { id: 3, fid: 1, name: "Casper Selest", gender: "male" },
         { id: 4, pids: [2], name: "Darin Selest", gender: "male" },
         { id: 5, pids: [2], name: "Hadis Selest", gender: "male" },
       ],

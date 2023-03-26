@@ -10,10 +10,15 @@ import AddIcon from "@mui/icons-material/Add";
 import FamilyFrom from "./FamilyFrom";
 import { useState } from "react";
 import useFamilyInformationStore from "../hooks/useFamilyInfomationStore";
+import { Status } from "../constants";
 
 const FamilyInformation = () => {
-  const { addFamilyInformation, familyInformation, fetchFamilyInformation } =
-    useFamilyInformationStore();
+  const {
+    addFamilyInformation,
+    familyInformation,
+    updateFamilyInfromation,
+    fetchFamilyInformation,
+  } = useFamilyInformationStore();
 
   const [isFromOpen, setIsFromOpen] = useState(false);
 
@@ -30,6 +35,13 @@ const FamilyInformation = () => {
     setIsFromOpen(false);
   };
 
+  const handleFromUpdate = async (form) => {
+    await updateFamilyInfromation(form);
+    await fetchFamilyInformation();
+    setIsFromOpen(false);
+  };
+
+
   return (
     <Container>
       <Box py={4}>
@@ -42,6 +54,7 @@ const FamilyInformation = () => {
             <FamilyFrom
               key={family.id}
               onCancel={handleFromCancel}
+              onUpdate={handleFromUpdate}
               isReadOnly
               defaultValue={family}
             />
