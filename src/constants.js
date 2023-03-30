@@ -5,6 +5,11 @@ export const Status = {
 };
 
 export const Gender = {
-  Male: "ชาย",
-  Female: "หญิง",
+  Male: "male",
+  Female: "female",
+};
+
+export const MemberPosition = {
+  Spouse: "คู่สมรส",
+  Child: "บุตร",
 };

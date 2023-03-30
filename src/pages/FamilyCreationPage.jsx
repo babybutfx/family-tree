@@ -1,13 +1,13 @@
 import React from "react";
 
 import CustomAppBar from "../components/CustomAppBar";
-import FamilyInformation from "../components/FamilyInformation";
+import FamilyInfo from "../components/FamilyInfo";
 
 const FamilyCreationPage = () => {
   return (
     <div>
       <CustomAppBar title="Family Infromation" />
-      <FamilyInformation />
+      <FamilyInfo />
     </div>
   );
 };

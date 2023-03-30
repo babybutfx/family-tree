@@ -11,11 +11,6 @@ import MenuIcon from "@mui/icons-material/Menu";
 import { useNavigate } from "react-router-dom";
 
 function CustomAppBar({ title }) {
-  const [mobileOpen, setMobileOpen] = React.useState(false);
-
-  const handleDrawerToggle = () => {
-    setMobileOpen((prevState) => !prevState);
-  };
   const navigate = useNavigate();
 
   return (
@@ -26,7 +21,6 @@ function CustomAppBar({ title }) {
             color="inherit"
             aria-label="open drawer"
             edge="start"
-            onClick={handleDrawerToggle}
             sx={{ mr: 2, display: { sm: "none" } }}
           >
             <MenuIcon />
