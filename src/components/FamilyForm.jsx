@@ -1,43 +1,13 @@
-import { Button, Grid, Paper, TextField, MenuItem } from "@mui/material";
-import dayjs from "dayjs";
 import { useState } from "react";
+import { Button, Grid, Paper, TextField, MenuItem } from "@mui/material";
 import { Status, Gender } from "../constants";
 import RelationshipDialog from "./RelationshipDialog";
+import useFamilyForm from "../hooks/useFamilyForm";
 
-let i = 0;
-const FamilyFrom = ({
-  onCancel,
-  onSubmit,
-  onUpdate,
-  defaultValue,
-  isReadOnly,
-}) => {
-  const defaultForm = defaultValue ?? {
-    firstname: "",
-    lastname: "",
-    nickname: "",
-    birthday: "",
-    gender: "",
-    status: "",
-  };
+const FamilyForm = ({ onCancel, onSubmit, onUpdate, value, isReadOnly }) => {
+  const { form, handleFormChange } = useFamilyForm({ value });
   const [isEditing, setIsEditing] = useState(!isReadOnly);
-  const [form, setForm] = useState(defaultForm);
   const [isOpen, setIsOpen] = useState(false);
-
-  const handleFormChange = (e) => {
-    const name = e.target.name;
-    let value;
-    if (name === "birthday") {
-      value = dayjs(new Date(e.target.valueAsDate)).format("YYYY-MM-DD");
-    } else {
-      value = e.target.value;
-    }
-
-    setForm({
-      ...form,
-      [name]: value,
-    });
-  };
 
   const handleFormEdit = () => {
     setIsEditing(true);
@@ -47,16 +17,12 @@ const FamilyFrom = ({
     setIsOpen(true);
   };
 
-  const handleRelationshipCancel = () => {
-    setIsOpen(false);
-  };
-
   const handleFormCancel = () => {
     setIsEditing(false);
     onCancel();
   };
 
-  const handleFormmSubmit = () => {
+  const handleFormSubmit = () => {
     onSubmit(form);
   };
 
@@ -69,8 +35,7 @@ const FamilyFrom = ({
     <>
       {isReadOnly && isOpen && (
         <RelationshipDialog
-          value={defaultValue}
-          onCancel={handleRelationshipCancel}
+          memberInfo={value}
           onClose={() => setIsOpen(false)}
         />
       )}
@@ -159,7 +124,7 @@ const FamilyFrom = ({
               fullWidth
             >
               <MenuItem value={Status.Single}>โสด</MenuItem>
-              <MenuItem value={Status.Married}>แต่งงาน</MenuItem>
+              <MenuItem value={Status.Married}>สมรส</MenuItem>
               <MenuItem value={Status.Divorce}>หย่าร้าง</MenuItem>
             </TextField>
           </Grid>
@@ -175,12 +140,12 @@ const FamilyFrom = ({
                   Cancel
                 </Button>
               </Grid>
-              {!defaultValue ? (
+              {!value ? (
                 <Grid item xs={2}>
                   <Button
                     variant="contained"
                     size="large"
-                    onClick={handleFormmSubmit}
+                    onClick={handleFormSubmit}
                     fullWidth
                   >
                     Submit
@@ -205,7 +170,7 @@ const FamilyFrom = ({
                 <Button
                   size="large"
                   onClick={handleRelationshipAdd}
-                  disabled={form.status === Status.Single}
+                  // disabled={form.status === Status.Single}
                   fullWidth
                 >
                   Relationship
@@ -219,4 +184,4 @@ const FamilyFrom = ({
   );
 };
 
-export default FamilyFrom;
+export default FamilyForm;

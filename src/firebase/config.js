@@ -4,7 +4,7 @@ const firebaseConfig = {
   projectId: "login-fam",
   storageBucket: "login-fam.appspot.com",
   messagingSenderId: "462773663524",
-  appId: "1:462773663524:web:b72caf0dd8e937347625b1"
+  appId: "1:462773663524:web:b72caf0dd8e937347625b1",
 };
-  
+
 export default firebaseConfig;

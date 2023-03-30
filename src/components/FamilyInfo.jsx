@@ -1,3 +1,4 @@
+import { useState } from "react";
 import {
   Box,
   Button,
@@ -7,18 +8,11 @@ import {
   Typography,
 } from "@mui/material";
 import AddIcon from "@mui/icons-material/Add";
-import FamilyFrom from "./FamilyFrom";
-import { useState } from "react";
-import useFamilyInformationStore from "../hooks/useFamilyInfomationStore";
-import { Status } from "../constants";
+import FamilyForm from "./FamilyForm";
+import useFamilyInfoStore from "../hooks/useFamilyInfoStore";
 
-const FamilyInformation = () => {
-  const {
-    addFamilyInformation,
-    familyInformation,
-    updateFamilyInfromation,
-    fetchFamilyInformation,
-  } = useFamilyInformationStore();
+const FamilyInfo = () => {
+  const { addFamilyInfo, familyInfo, updateFamilyInfo } = useFamilyInfoStore();
 
   const [isFromOpen, setIsFromOpen] = useState(false);
 
@@ -30,17 +24,14 @@ const FamilyInformation = () => {
   };
 
   const handleFormSubmit = async (form) => {
-    await addFamilyInformation(form);
-    await fetchFamilyInformation();
+    await addFamilyInfo(form);
     setIsFromOpen(false);
   };
 
   const handleFromUpdate = async (form) => {
-    await updateFamilyInfromation(form);
-    await fetchFamilyInformation();
+    await updateFamilyInfo(form);
     setIsFromOpen(false);
   };
-
 
   return (
     <Container>
@@ -50,17 +41,17 @@ const FamilyInformation = () => {
         </Box>
         <Divider />
         <Stack p={2} spacing={2}>
-          {familyInformation.map((family) => (
-            <FamilyFrom
+          {familyInfo.map((family) => (
+            <FamilyForm
               key={family.id}
               onCancel={handleFromCancel}
               onUpdate={handleFromUpdate}
               isReadOnly
-              defaultValue={family}
+              value={family}
             />
           ))}
           {isFromOpen ? (
-            <FamilyFrom
+            <FamilyForm
               onCancel={handleFromCancel}
               onSubmit={handleFormSubmit}
             />
@@ -85,4 +76,4 @@ const FamilyInformation = () => {
   );
 };
 
-export default FamilyInformation;
+export default FamilyInfo;

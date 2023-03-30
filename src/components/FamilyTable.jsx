@@ -1,5 +1,4 @@
 import * as React from "react";
-import PropTypes from "prop-types";
 import KeyboardArrowDownIcon from "@mui/icons-material/KeyboardArrowDown";
 import KeyboardArrowUpIcon from "@mui/icons-material/KeyboardArrowUp";
 import {
@@ -19,47 +18,25 @@ import {
   Paper,
 } from "@mui/material";
 
-function createData(id, relationship, name, status) {
-  return {
-    id,
-    relationship,
-    name,
-    status,
-    member: [
-      {
-        relationship: "คู่สมรส",
-        name: "Bear  Fuffy",
-        status: "แต่งงาน",
-      },
-      {
-        relationship: "ลูก",
-        name: "Caspain  Selest",
-        status: "โสด",
-      },
-      {
-        relationship: "ลูก",
-        name: "Casper  Selest",
-        status: "โสด",
-      },
-    ],
-  };
-}
+import useFamilyInfoStore from "../hooks/useFamilyInfoStore";
+import { MemberPosition } from "../constants";
 
-function Row(props) {
-  const { row } = props;
+function Row({ row }) {
   const [open, setOpen] = React.useState(false);
 
   return (
     <React.Fragment>
       <TableRow sx={{ "& > *": { borderBottom: "unset" } }}>
         <TableCell>
-          <IconButton
-            aria-label="expand row"
-            size="small"
-            onClick={() => setOpen(!open)}
-          >
-            {open ? <KeyboardArrowUpIcon /> : <KeyboardArrowDownIcon />}
-          </IconButton>
+          {row.member.length > 0 && (
+            <IconButton
+              aria-label="expand row"
+              size="small"
+              onClick={() => setOpen(!open)}
+            >
+              {open ? <KeyboardArrowUpIcon /> : <KeyboardArrowDownIcon />}
+            </IconButton>
+          )}
         </TableCell>
         <TableCell component="th" scope="row">
           {row.name}
@@ -102,27 +79,42 @@ function Row(props) {
   );
 }
 
-Row.propTypes = {
-  row: PropTypes.shape({
-    name: PropTypes.string.isRequired,
-    status: PropTypes.string.isRequired,
-    member: PropTypes.arrayOf(
-      PropTypes.shape({
-        relationship: PropTypes.string.isRequired,
-        name: PropTypes.string.isRequired,
-        status: PropTypes.string.isRequired,
-      })
-    ).isRequired,
-  }).isRequired,
-};
+const FamilyTable = () => {
+  const { familyInfo } = useFamilyInfoStore();
 
-const rows = [
-  createData("11111", " dad", "Darin Selest", "แต่งงาน"),
-  createData("22222", "dad", "Hadis Selest", "หย่าร้าง"),
-  createData("33333", "dad", "ell Selest", "หย่าร้าง"),
-];
+  const data = familyInfo.map((member) => {
+    const { firstname, lastname, ...rest } = member;
 
-export default function CollapsibleTable() {
+    return {
+      ...rest,
+      name: `${firstname} ${lastname}`,
+      member: [
+        ...(rest.pids
+          ? rest.pids.map((pid) => {
+              const pMember = familyInfo.find((f) => f.id === pid);
+
+              return {
+                relationship: MemberPosition.Spouse,
+                name: `${pMember.firstname} ${pMember.lastname}`,
+                status: pMember.status,
+              };
+            })
+          : []),
+        ...(rest.cids
+          ? rest.cids.map((cid) => {
+              const pMember = familyInfo.find((f) => f.id === cid);
+
+              return {
+                relationship: MemberPosition.Child,
+                name: `${pMember.firstname} ${pMember.lastname}`,
+                status: pMember.status,
+              };
+            })
+          : []),
+      ],
+    };
+  });
+
   return (
     <Container>
       <Box py={4}>
@@ -142,7 +134,7 @@ export default function CollapsibleTable() {
               </TableHead>
 
               <TableBody>
-                {rows.map((row) => (
+                {data.map((row) => (
                   <Row key={row.id} row={row} />
                 ))}
               </TableBody>
@@ -152,4 +144,6 @@ export default function CollapsibleTable() {
       </Box>
     </Container>
   );
-}
+};
+
+export default FamilyTable;
